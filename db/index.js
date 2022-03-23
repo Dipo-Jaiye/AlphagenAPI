@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const { MONGO_URI, MONGO_USER, MONGO_PASS,
-    MONGO_DB, SESSION_SECRET, MONGO_FULL_URI } = process.env;
+    MONGO_DB, SESSION_SECRET, MONGO_FULL_URI } = require('../config');
 
 exports.connect = async () => {
     await mongoose.connect(MONGO_URI, {

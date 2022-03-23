@@ -4,13 +4,14 @@ const cors = require("cors");
 const app = express();
 const router = require("./routes");
 const db = require("./db");
-const passjwtStrat = require("./controllers/userController").passjwt;
+const passjwtStrat = require("./controllers/usersController").passjwt;
 const User = require("./models/User");
+const {PORT, port, } = require('./config');
 
 // database connection
 db.connect();
 
-const port = process.env.PORT || process.env.port || 8080;
+const appPort = PORT || port || 8080;
 
 // middleware
 app.use(cors());
@@ -27,4 +28,4 @@ passport.use(passjwtStrat);
 
 app.use("api/v1/", router);
 
-app.listen(port, () => console.log(`App listening on ${port}`));
+app.listen(appPort, () => console.log(`App listening on ${appPort}`));
