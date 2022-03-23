@@ -26,6 +26,6 @@ app.use(passport.initialize());
 passport.use(User.createStrategy());
 passport.use(passjwtStrat);
 
-app.use("api/v1/", router);
+app.use("/api/v1", router);
 
 app.listen(appPort, () => console.log(`App listening on ${appPort}`));
