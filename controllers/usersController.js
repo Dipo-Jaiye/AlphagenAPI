@@ -88,7 +88,7 @@ module.exports = {
             })
           }
         );
-      })(req, res, next);
+      })(req, res);
     } catch (err) {
       console.log(`Failed to log in user because: ${err.message}`);
       res.status(500).json({
