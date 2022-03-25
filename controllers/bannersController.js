@@ -4,8 +4,43 @@ const Comment = require("../models/Comment");
 const Participant = require("../models/Participant");
 
 module.exports = {
-    create: (req, res) => {
+    create: async (req, res) => {
+        try {
+            console.log(req.user);
+            const newBanner = {
+                author: req.user,
+                image: req.body.files["bannerdp"][0].path,
+                title: req.body.title,
+                description: req.body.description,
+                visibility: req.body.visibility,
+                category: req.body.category,
+            };
+            await Banner.create(newBanner)
+                .then(banner => {
+                    if (!banner) return res.status(400).json({
+                        status: false,
+                        message: "Banner not created",
+                    });
 
+                    return res.status(201).json({
+                        status: true,
+                        data: banner,
+                    });
+                })
+                .catch(err => {
+                    console.log(err);
+                    return res.status(400).json({
+                        status: false,
+                        message: err.message,
+                    });
+                })
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                status: false,
+                message: error.message,
+            });
+        }
     },
 
     getone: (req, res) => {

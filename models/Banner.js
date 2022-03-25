@@ -8,7 +8,11 @@ const bannerSchema = Schema(
     },
     image: {
       type: String
-    }
+    },
+    title: String,
+    description: String,
+    category: String,
+    visibility: String
   },
   {
     timestamps: true

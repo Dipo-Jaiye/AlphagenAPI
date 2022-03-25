@@ -29,17 +29,36 @@ module.exports = {
           console.log(
             `Failed to create and retrieve user account because: ${err.message}`
           );
-          res.status(500).json({
+          return res.status(500).json({
             status: false,
             message: err.message
           });
         }
 
-        res.status(201).json({
-          status: true,
-          message: "Created successfully",
-          data: cleanUser(user)
-        });
+        jwt.sign(
+          {
+            data: user._id,
+            exp: Math.floor(Date.now() / 1000) + 60 * 60
+          },
+          JWT_SECRET,
+          (err, token) => {
+            if (err) {
+              res.status(500).json({
+                status: false,
+                message: err.message
+              });
+            }
+
+            res.locals.data = cleanUser(user);
+            res.locals.data["token"] = token;
+
+            res.status(201).json({
+              status: true,
+              message: "Created successfully",
+              data: res.locals.data
+            });
+          }
+        );
       });
     } catch (err) {
       console.log(`Failed to create user account because: ${err.message}`);
@@ -54,7 +73,7 @@ module.exports = {
     try {
       passport.authenticate("local", (err, user, info) => {
         if (err) {
-          res.status(500).json({
+          return res.status(500).json({
             status: false,
             message: err.message
           });
@@ -110,4 +129,32 @@ module.exports = {
       }
     });
   }),
+
+  protect: (req, res, next) => {
+    try {
+      passport.authenticate("jwt", { session: false }, (err, user) => {
+        if (err) {
+          return res.status(400).json({
+            status: false,
+            message: err.message
+          });
+        }
+        if (user) {
+          req.user = user;
+          return next();
+        } else {
+          return res.status(401).json({
+            status: false,
+            message: "Unauthorized"
+          });
+        }
+      })(req, res, next);
+    } catch (err) {
+      console.log(`Failed to log in user because: ${err.message}`);
+      return res.status(500).json({
+        status: false,
+        message: err.message
+      });
+    }
+  },
 };
