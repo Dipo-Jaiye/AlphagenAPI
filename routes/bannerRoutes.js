@@ -14,6 +14,11 @@ uploads = formData({storage:storage}),
 noImageFormParser = uploads.none(),
 ImagesFormParser = uploads.fields([{name:"bannerdp"}]);
 
+router.options("/create", cors({
+    origin: true,
+    credentials: true,
+    maxAge: 86400
+}));
 router.post("/create", userCtrl.protect, ImagesFormParser, bannerCtrl.create);
 router.get("/:id/get", userCtrl.protect, bannerCtrl.getone);
 router.get("/getall", userCtrl.protect, bannerCtrl.getall);
