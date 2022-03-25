@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const cors = require("cors");
 const bannerCtrl = require("../controllers/bannersController");
 const userCtrl = require("../controllers/usersController");
 const cloudinary = require("cloudinary").v2;
