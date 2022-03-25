@@ -15,7 +15,7 @@ const appPort = PORT || port || 8080;
 
 // middleware
 app.use(cors());
-app.options(cors({
+app.options("*", cors({
     origin: true,
     credentials: true,
     maxAge: 86400
