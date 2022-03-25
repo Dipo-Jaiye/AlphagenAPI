@@ -6,10 +6,15 @@ const Participant = require("../models/Participant");
 module.exports = {
     create: async (req, res) => {
         try {
-            console.log(req.user);
+            if (!req.files || !req.files["bannerdp"]) {
+                return res.status(400).json({
+                    status: false,
+                    message: "No image found",
+                });
+            }
             const newBanner = {
-                author: req.user,
-                image: req.body.files["bannerdp"][0].path,
+                author: req.user._id,
+                image: req.files["bannerdp"][0].path,
                 title: req.body.title,
                 description: req.body.description,
                 visibility: req.body.visibility,
