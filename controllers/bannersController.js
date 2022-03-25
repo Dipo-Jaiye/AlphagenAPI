@@ -6,6 +6,13 @@ const Participant = require("../models/Participant");
 module.exports = {
     create: async (req, res) => {
         try {
+            if (!req.body.title){
+                return res.status(400).json({
+                    status: false,
+                    message: "Title is required",
+                });
+            }
+            
             if (!req.files || !req.files["bannerdp"]) {
                 return res.status(400).json({
                     status: false,
