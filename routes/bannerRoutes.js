@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const cors = require("cors");
 const bannerCtrl = require("../controllers/bannersController");
 const userCtrl = require("../controllers/usersController");
 const cloudinary = require("cloudinary").v2;
@@ -15,11 +14,6 @@ uploads = formData({storage:storage}),
 noImageFormParser = uploads.none(),
 ImagesFormParser = uploads.fields([{name:"bannerdp"}]);
 
-router.options("/create", cors({
-    origin: true,
-    credentials: true,
-    maxAge: 86400
-}));
 router.post("/create", userCtrl.protect, ImagesFormParser, bannerCtrl.create);
 router.get("/:id/get", userCtrl.protect, bannerCtrl.getone);
 router.get("/getall", userCtrl.protect, bannerCtrl.getall);

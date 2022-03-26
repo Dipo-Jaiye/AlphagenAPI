@@ -6,13 +6,13 @@ const Participant = require("../models/Participant");
 module.exports = {
     create: async (req, res) => {
         try {
-            if (!req.body.title){
+            if (!req.body.title) {
                 return res.status(400).json({
                     status: false,
                     message: "Title is required",
                 });
             }
-            
+
             if (!req.files || !req.files["bannerdp"]) {
                 return res.status(400).json({
                     status: false,
@@ -55,12 +55,61 @@ module.exports = {
         }
     },
 
-    getone: (req, res) => {
+    getone: async (req, res) => {
+        try {
+            await Banner.findById(req.params.id).then(banner => {
+                if (!banner) {
+                    return res.status(404).json({
+                        status: false,
+                        message: "Banner with that id not found",
+                    });
+                }
+                return res.status(200).json({
+                    status: true,
+                    data: banner,
+                });
+            }).catch(err => {
+                return res.status(400).json({
+                    status: false,
+                    message: err.nessage,
+                });
+            });
 
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                status: false,
+                message: error.message,
+            });
+        }
     },
 
-    getall: (req, res) => {
-
+    getall: async (req, res) => {
+        try {
+            await Banner.find().then(banners => {
+                if (!banners) {
+                    return res.status(404).json({
+                        status: false,
+                        message: "No banners found",
+                    });
+                }
+                return res.status(200).json({
+                    status: true,
+                    data: banners,
+                });
+            }).catch(err => {
+                return res.status(400).json({
+                    status: false,
+                    message: err.nessage,
+                });
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                status: false,
+                message: error.message,
+            });
+        }
     },
 
     update: (req, res) => {
